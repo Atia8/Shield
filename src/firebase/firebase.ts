@@ -1,7 +1,13 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  getReactNativePersistence,
+  initializeAuth,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
+import { Platform } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB0lpYwh0cUZ9EY78OnFOwCyWceWoQu8KM",
@@ -14,6 +20,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+// Conditionally initialize Firebase Auth based on the current platform
+export const auth =
+  Platform.OS === "web"
+    ? getAuth(app) // On Web: Firebase automatically uses the browser's native storage
+    : initializeAuth(app, {
+        persistence: getReactNativePersistence(AsyncStorage), // On Mobile: Use AsyncStorage
+      });
+
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
