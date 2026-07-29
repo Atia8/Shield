@@ -1,99 +1,70 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { Shield } from "lucide-react-native";
-import {
-  Image,
-
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WelcomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      {/* Hero Image */}
-      <View className="flex-[3]">
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900",
-          }}
-          className="w-full h-full"
-          resizeMode="cover"
-        />
+    <View className="flex-1 bg-[#0B0F1A]">
+      {/* 1. Absolute Background Gradient */}
+      <LinearGradient
+        colors={["#0B0F1A", "#1E1B4B", "#2E1065"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
 
-<LinearGradient
-  
-  colors={[
-  "rgba(0,0,0,0.08)",
-  "rgba(0,0,0,0)",
-  "rgba(0,0,0,0.75)",
-]}
-locations={[0, 0.4, 1]}
-   style={{
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  }}
-/>
+      {/* 2. Main Flex Layout */}
+      <SafeAreaView edges={["top", "bottom"]} className="flex-1 px-8 pb-8">
+        {/* Top Spacer to force the logo into the exact vertical center */}
+        <View className="flex-1" />
 
-        {/* Overlay */}
-        <View className="absolute bottom-8 left-6 pb-5">
-          <View className="flex-row items-center">
-            <View className="w-10 h-10 rounded-xl bg-coral items-center justify-center mr-3">
-              <Shield color="white" size={20} />
+        {/* --- Center Content (Logo & Title) --- */}
+        <View className="items-center justify-center">
+          <View className="w-44 h-44 rounded-full bg-[#10B981]/5 items-center justify-center border-4 border-[#10B981]/10 mb-8">
+            <View className="w-32 h-32 rounded-full bg-[#10B981]/10 items-center justify-center border-2 border-[#10B981]/30">
+              <Shield
+                color="#10B981"
+                size={80}
+                strokeWidth={1.5}
+                fill="rgba(16, 185, 129, 0.2)"
+              />
             </View>
-
-            <Text className="text-white text-3xl font-bold">
-              SheShield 
-            </Text>
           </View>
 
-          <Text className="text-white mt-3 text-base">
-            Personal safety, everywhere you go.
+          <Text className="text-white text-5xl font-black mb-3 tracking-wide">
+            Shield
+          </Text>
+          <Text className="text-[#10B981] text-sm font-bold text-center tracking-widest uppercase">
+            Personal Safety Companion
           </Text>
         </View>
-      </View>
 
-      {/* Bottom Card */}
-      <View className="flex-2 bg-white rounded-t-[32px] -mt-6 px-6 pt-8 pb-4">
-        <Text className="text-3xl font-bold text-nearBlack">
-          Safety you can rely on,
-        </Text>
-
-        <Text className="text-3xl font-bold text-nearBlack">
-          community you can trust.
-        </Text>
-
-        <Text className="text-midGray mt-4 leading-6">
-          Join thousands of women who travel safer every day.
-        </Text>
-
-        <TouchableOpacity
-          className="bg-coral rounded-2xl py-4 mt-8 items-center"
-          onPress={() => router.push("/signup")}
-        >
-          <Text className="text-white font-bold text-lg">
-            Sign up with Email
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="items-center mt-6"
-          onPress={() => router.push("/login")}
-        >
-          <Text className="text-midGray">
-            Already have an account?{" "}
-            <Text className="text-nearBlack font-bold">
-              Log in
+        {/* --- Bottom Action Area --- */}
+        {/* flex-1 with justify-end pushes the buttons to the very bottom */}
+        <View className="flex-1 justify-end">
+          <TouchableOpacity
+            activeOpacity={0.8}
+            className="bg-[#10B981] rounded-2xl py-4 items-center shadow-lg mb-4"
+            onPress={() => router.push("/signup")}
+          >
+            <Text className="text-[#0B0F1A] font-black text-lg tracking-widest uppercase">
+              Get Started with Shield
             </Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="py-3 items-center"
+            onPress={() => router.push("/login")}
+          >
+            <Text className="text-white/60 text-base font-medium">
+              Already have an account?{" "}
+              <Text className="text-white font-bold">Log in</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
