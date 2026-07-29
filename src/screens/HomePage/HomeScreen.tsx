@@ -20,7 +20,7 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { triggerEmergencyAlert } from "../services/sos";
+import { triggerEmergencyAlert } from "../../services/sos";
 
 interface HomeScreenProps {
   onNavigateToTrackRoute?: () => void;
@@ -42,8 +42,8 @@ export default function HomeScreen({
   const [sosState, setSosState] = useState<SosState>("IDLE");
   const [countdown, setCountdown] = useState(5);
 
-  // Use a ref to keep track of the interval so we can cancel it
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // FIXED: Using ReturnType to get the correct cross-platform timer type
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const executeSos = async () => {
     setSosState("SENDING");
