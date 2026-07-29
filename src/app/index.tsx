@@ -1,10 +1,8 @@
 import WelcomeScreen from "../screens/auth/WelcomeScreen";
 
 export default function Page() {
-  return <WelcomeScreen/>;
-
+  return <WelcomeScreen />;
 }
-
 // import { Text, View } from "react-native";
 
 // console.log("INDEX FILE LOADED");
