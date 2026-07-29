@@ -8,7 +8,6 @@
     "expo-constants": "~57.0.3",
     "expo-device": "~57.0.0",
     "expo-font": "~57.0.0",
-<<<<<<< Updated upstream
     "expo-glass-effect": "~57.0.0",
     "expo-image": "~57.0.0",
     "expo-linking": "~57.0.2",
@@ -18,7 +17,6 @@
     "expo-symbols": "~57.0.0",
     "expo-system-ui": "~57.0.0",
     "expo-web-browser": "~57.0.0",
-=======
     "expo-glass-effect": "~57.0.1",
     "expo-image": "~57.0.1",
     "expo-linear-gradient": "~57.0.1",
@@ -33,7 +31,6 @@
     "firebase": "^12.16.0",
     "lucide-react-native": "^1.25.0",
     "nativewind": "^4.2.6",
->>>>>>> Stashed changes
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.0",
