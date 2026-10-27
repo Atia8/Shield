@@ -6,21 +6,36 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "shield",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0B0F1A",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Shield shares your location with trusted contacts and nearby helpers during an emergency.",
+        "NSCameraUsageDescription": "Shield uses the camera to take a selfie for helper verification.",
+        "NSPhotoLibraryUsageDescription": "Shield lets you pick photos of your ID for helper verification.",
+        "NSMotionUsageDescription": "Shield uses motion sensors to detect falls and shake-to-SOS."
+      }
     },
     "android": {
+      "package": "com.shield.safety",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0B0F1A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "VIBRATE",
+        "SEND_SMS"
+      ],
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -28,11 +43,27 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0B0F1A",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Shield shares your location with trusted contacts and nearby helpers during an emergency."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Shield uses the camera to take a selfie for helper verification.",
+          "photosPermission": "Shield lets you pick photos of your ID for helper verification."
+        }
+      ],
+      "expo-image",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -41,3 +41,17 @@ example
 # generated native folders
 /ios
 /android
+
+# Firebase emulators
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Android build log
+android-build.log
+
+# Native module build output
+modules/*/android/build/
+
+# Contribution hand-off packages
+handoff/

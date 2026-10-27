@@ -1,0 +1,88 @@
+rules_version = '2';
+
+// Shield Firestore security rules.
+// Deploy: Firebase console → Firestore Database → Rules → paste → Publish
+// (or `firebase deploy --only firestore:rules`).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Profiles: only the owner reads/writes. Alerts carry the few fields a
+    // helper needs (name, phone, medical info), so nobody reads other profiles.
+    match /users/{uid} {
+      allow read, create, delete: if isSelf(uid);
+      // Owners can't approve themselves as helpers. Only an admin (console)
+      // sets isHelperVerified / verificationStatus "approved".
+      // NOTE: with EXPO_PUBLIC_DEMO_AUTO_VERIFY=true the app approves itself;
+      // use the "demo" rule below instead for presentations.
+      allow update: if isSelf(uid) && (
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isHelperVerified'])
+        || isDemo()
+      ) && (
+        request.resource.data.get('verificationStatus', 'none') != 'approved'
+        || resource.data.get('verificationStatus', 'none') == 'approved'
+        || isDemo()
+      );
+
+      match /contacts/{contactId} {
+        allow read, write: if isSelf(uid);
+      }
+    }
+
+    // Flip to `true` only for demos that use EXPO_PUBLIC_DEMO_AUTO_VERIFY=true.
+    function isDemo() {
+      return true;
+    }
+
+    // SOS alerts.
+    match /alerts/{alertId} {
+      // Helpers must see open alerts; the danger-zone map aggregates past ones.
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'active';
+
+      // The person who raised it can update it (live location, end it).
+      // A helper can accept an active alert, and later update one they hold.
+      allow update: if signedIn() && (
+        resource.data.userId == request.auth.uid
+        || (resource.data.status == 'active'
+            && request.resource.data.acceptedBy == request.auth.uid
+            && request.resource.data.status == 'accepted')
+        || resource.data.acceptedBy == request.auth.uid
+      );
+
+      // Chat between the requester and the accepting helper only.
+      match /messages/{messageId} {
+        function alertData() {
+          return get(/databases/$(database)/documents/alerts/$(alertId)).data;
+        }
+        function participant() {
+          return signedIn() && (
+            alertData().userId == request.auth.uid
+            || alertData().get('acceptedBy', null) == request.auth.uid
+          );
+        }
+        allow read: if participant();
+        allow create: if participant()
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() <= 500;
+      }
+    }
+
+    // Helper ID verification photos: owner writes, owner reads.
+    // Admins review in the Firebase console.
+    match /verifications/{uid} {
+      allow read, write: if isSelf(uid);
+    }
+  }
+}
