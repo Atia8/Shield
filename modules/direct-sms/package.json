@@ -1,0 +1,6 @@
+{
+  "name": "direct-sms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shield: send SOS texts straight from the SIM on Android (local Expo module)"
+}
